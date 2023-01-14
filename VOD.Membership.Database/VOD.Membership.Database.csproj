@@ -20,10 +20,4 @@
     <ProjectReference Include="..\VOD.Common\VOD.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Contexts\" />
-    <Folder Include="Extensions\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>
