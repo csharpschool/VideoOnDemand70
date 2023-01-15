@@ -80,6 +80,11 @@ void ConfigureAutoMapper()
             .ForMember(dest => dest.Instructor, src => src.Ignore())
             .ForMember(dest => dest.Sections, src => src.Ignore());
 
+        cfg.CreateMap<VideoEditDTO, Video>();
+        cfg.CreateMap<VideoCreateDTO, Video>();
+
+        cfg.CreateMap<SectionEditDTO, Section>();
+        cfg.CreateMap<SectionCreateDTO, Section>();
 
         cfg.CreateMap<Section, SectionDTO>()
             .ForMember(dest => dest.Course, src => src.MapFrom(s => s.Course.Title))

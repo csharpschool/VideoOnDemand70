@@ -2,26 +2,20 @@
 
 [Route("api/[controller]")]
 [ApiController]
-public class CoursesController : ControllerBase
+public class InstructorsController : ControllerBase
 {
-    // GET: api/<CoursesController>
     private readonly IDbService _db;
 
-    public CoursesController(IDbService db) => _db = db;
+    public InstructorsController(IDbService db) => _db = db;
 
     [HttpGet]
-    public async Task<IResult> Get(bool freeOnly)
+    public async Task<IResult> Get()
     {
         try
         {
-            _db.Include<Instructor>();
-            //List<CourseDTO>? courses = await _db.GetAsync<Course, CourseDTO>();
+            List<InstructorDTO>? instructors = await _db.GetAsync<Instructor, InstructorDTO>();
 
-            List<CourseDTO>? courses = freeOnly ?
-                await _db.GetAsync<Course, CourseDTO>(c => c.Free.Equals(freeOnly)) :
-                await _db.GetAsync<Course, CourseDTO>();
-
-            return Results.Ok(courses);
+            return Results.Ok(instructors);
         }
         catch
         {
@@ -30,18 +24,15 @@ public class CoursesController : ControllerBase
         return Results.NotFound();
     }
 
-    // GET api/<CoursesController>/5
     [HttpGet("{id}")]
     public async Task<IResult> Get(int id)
     {
         try
         {
-            _db.Include<Instructor>();
-            _db.Include<Section>();
-            _db.Include<Video>();
-            var course = await _db.SingleAsync<Course, CourseDTO>(c => c.Id.Equals(id));
+            var instructor = await _db.SingleAsync<Instructor, InstructorDTO>(c => c.Id.Equals(id));
+            if(instructor is null) return Results.NotFound();
 
-            return Results.Ok(course);
+            return Results.Ok(instructor);
         }
         catch
         {
@@ -49,21 +40,20 @@ public class CoursesController : ControllerBase
         return Results.NotFound();
     }
 
-    // POST api/<CoursesController>
     [HttpPost]
-    public async Task<IResult> Post([FromBody] CourseCreateDTO dto)
+    public async Task<IResult> Post([FromBody] InstructorDTO dto)
     {
         try
         {
             if (dto == null) return Results.BadRequest();
 
-            var course = await _db.AddAsync<Course, CourseCreateDTO>(dto);
+            var instructor = await _db.AddAsync<Instructor, InstructorDTO>(dto);
 
             var success = await _db.SaveChangesAsync();
 
             if (!success) return Results.BadRequest();
 
-            return Results.Created(_db.GetURI<Course>(course), course);
+            return Results.Created(_db.GetURI<Instructor>(instructor), instructor);
         }
         catch
         {
@@ -72,22 +62,18 @@ public class CoursesController : ControllerBase
         return Results.BadRequest();
     }
 
-    // PUT api/<CoursesController>/5
     [HttpPut("{id}")]
-    public async Task<IResult> Put(int id, [FromBody] CourseEditDTO dto)
+    public async Task<IResult> Put(int id, [FromBody] InstructorDTO dto)
     {
         try
         {
             if (dto == null) return Results.BadRequest("No entity provided");
             if (!id.Equals(dto.Id)) return Results.BadRequest("Differing ids");
 
-            var exists = await _db.AnyAsync<Instructor>(i => i.Id.Equals(dto.InstructorId));
-            if (!exists) return Results.NotFound("Could not find related entity");
-
-            exists = await _db.AnyAsync<Course>(c => c.Id.Equals(id));
+            var exists = await _db.AnyAsync<Instructor>(c => c.Id.Equals(id));
             if (!exists) return Results.NotFound("Could not find entity");
 
-            _db.Update<Course, CourseEditDTO>(dto.Id, dto);
+            _db.Update<Instructor, InstructorDTO>(dto.Id, dto);
 
             var success = await _db.SaveChangesAsync();
 
@@ -103,13 +89,12 @@ public class CoursesController : ControllerBase
 
     }
 
-    // DELETE api/<CoursesController>/5
     [HttpDelete("{id}")]
     public async Task<IResult> Delete(int id)
     {
         try
         {
-            var success = await _db.DeleteAsync<Course>(id);
+            var success = await _db.DeleteAsync<Instructor>(id);
 
             if (!success) return Results.NotFound();
 
