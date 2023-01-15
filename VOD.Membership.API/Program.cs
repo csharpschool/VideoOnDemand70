@@ -72,6 +72,15 @@ void ConfigureAutoMapper()
            // Only needed for seeding data.
            .ForMember(dest => dest.Instructor, src => src.Ignore());
 
+        cfg.CreateMap<CourseEditDTO, Course>()
+            .ForMember(dest => dest.Instructor, src => src.Ignore())
+            .ForMember(dest => dest.Sections, src => src.Ignore());
+
+        cfg.CreateMap<CourseCreateDTO, Course>()
+            .ForMember(dest => dest.Instructor, src => src.Ignore())
+            .ForMember(dest => dest.Sections, src => src.Ignore());
+
+
         cfg.CreateMap<Section, SectionDTO>()
             .ForMember(dest => dest.Course, src => src.MapFrom(s => s.Course.Title))
             .ReverseMap()

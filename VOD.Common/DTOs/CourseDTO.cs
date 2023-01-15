@@ -13,3 +13,18 @@ public class CourseDTO
     public List<SectionDTO> Sections { get; set; } = new();
 }
 
+public class CourseCreateDTO
+{
+    public string ImageUrl { get; set; }
+    public string MarqueeImageUrl { get; set; }
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public bool Free { get; set; }
+
+    public int InstructorId { get; set; }
+}
+
+public class CourseEditDTO : CourseCreateDTO
+{
+    public int Id { get; set; }
+}

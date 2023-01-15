@@ -45,7 +45,8 @@ public static class VODContextExtensions
                 Title = "Course 2",
                 Description = description,
                 ImageUrl = "/images/course2.jpg",
-                MarqueeImageUrl = "/images/laptop.jpg"
+                MarqueeImageUrl = "/images/laptop.jpg",
+                Free = true
             });
             await service.AddAsync<Course, CourseDTO>(new CourseDTO
             {
