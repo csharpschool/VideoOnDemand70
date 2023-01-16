@@ -2,5 +2,9 @@
 
 public interface IAdminService
 {
-    Task<List<TDto>> Get<TDto>();
+    Task CreateAsync<TDto>(TDto dto);
+    Task DeleteAsync<TDto>(int id);
+    Task EditAsync<TDto>(TDto dto, int id);
+    Task<List<TDto>> GetAsync<TDto>();
+    Task<TDto?> GetAsync<TDto>(int id);
 }

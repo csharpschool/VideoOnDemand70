@@ -7,7 +7,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Model = await AdminService.Get<CourseDTO>();
+        Model = await AdminService.GetAsync<CourseDTO>();
     }
 
 
