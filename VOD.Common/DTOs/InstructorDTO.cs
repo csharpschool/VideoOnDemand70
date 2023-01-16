@@ -1,4 +1,4 @@
-﻿namespace VOD.Application.Common.DTOs;
+﻿namespace VOD.Common.DTOs;
 public class InstructorDTO
 {
     public int Id { get; set; }

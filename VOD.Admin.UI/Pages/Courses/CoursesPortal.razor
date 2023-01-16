@@ -1,5 +1,14 @@
-﻿<h3>CoursesPortal</h3>
+﻿@inject IAdminService AdminService
+
+<h3>CoursesPortal</h3>
 
 @code {
+    public List<CourseDTO> Model { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await AdminService.Get<CourseDTO>();
+    }
+
 
 }

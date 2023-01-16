@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace VOD.Application.Common.DTOs;
+﻿namespace VOD.Common.DTOs;
 public class SectionDTO
 {
     public int Id { get; set; }

@@ -1,9 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using VOD.Application.Common.DTOs;
-using VOD.Membership.Database.Contexts;
-using VOD.Membership.Database.Entities;
-using VOD.Membership.Database.Services;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

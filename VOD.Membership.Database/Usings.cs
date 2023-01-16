@@ -5,4 +5,4 @@ global using System.Linq.Expressions;
 global using VOD.Membership.Database.Contexts;
 global using VOD.Membership.Database.Entities;
 global using VOD.Membership.Database.Services;
-global using VOD.Application.Common.DTOs;
+global using VOD.Common.DTOs;
