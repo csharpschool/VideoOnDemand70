@@ -1,14 +1,36 @@
 ﻿@inject IAdminService AdminService
 
-<h3>CoursesPortal</h3>
+@if (!string.IsNullOrEmpty(Alert))
+{
+    <div class="d-flex">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>@Alert</strong>
+            <button type="button" @onclick="CloseAlert" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+}
+
+<div class="d-flex me-1">
+    <a href="/" class="btn btn-outline-secondary rounded-0 me-1">Home</a>
+    <button type="button" class="btn btn-outline-primary rounded-0 me-1" @onclick="()=>ChangePageType(PageType.Index)">Index</button>
+    <button type="button" class="btn btn-outline-success rounded-0" @onclick="()=>ChangePageType(PageType.Create)">Create</button>
+</div>
+
+<h3>@Navigation</h3>
 
 @code {
-    public List<CourseDTO> Model { get; set; } = new();
+    string Navigation { get; set; } = PageType.Index;
+    List<CourseDTO> Model { get; set; } = new();
+    string Alert { get; set; } = "";
 
     protected override async Task OnInitializedAsync()
     {
+        Alert = "Test message";
         Model = await AdminService.GetAsync<CourseDTO>();
     }
 
+    void ChangePageType(string pageType) => Navigation = pageType;
+
+    void CloseAlert() => Alert = "";
 
 }
