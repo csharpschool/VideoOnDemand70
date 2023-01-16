@@ -16,7 +16,7 @@
     <button type="button" class="btn btn-outline-success rounded-0" @onclick="()=>ChangePageType(PageType.Create)">Create</button>
 </div>
 
-<h3>@Navigation</h3>
+<CoursesIndex OnClick="OnClick" Model="Model"></CoursesIndex>
 
 @code {
     string Navigation { get; set; } = PageType.Index;
@@ -25,12 +25,17 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Alert = "Test message";
+        Alert = "";
         Model = await AdminService.GetAsync<CourseDTO>();
     }
 
     void ChangePageType(string pageType) => Navigation = pageType;
 
     void CloseAlert() => Alert = "";
+
+    async Task OnClick(ClickModel model)
+    {
+        ChangePageType(model.PageType);
+    }
 
 }
