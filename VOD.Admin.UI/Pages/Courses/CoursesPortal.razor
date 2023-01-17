@@ -10,6 +10,15 @@
     </div>
 }
 
+@if (Navigation == PageType.Create)
+{
+    <ChangeCourse Page="@Navigation" OnChange="OnChange"></ChangeCourse>
+}
+@if (Navigation == PageType.Delete || Navigation == PageType.Edit)
+{
+    <ChangeCourse Page="@Navigation" OnChange="OnChange" Model="Course"></ChangeCourse>
+}
+
 <div class="d-flex me-1">
     <a href="/" class="btn btn-outline-secondary rounded-0 me-1">Home</a>
     <button type="button" class="btn btn-outline-primary rounded-0 me-1" @onclick="()=>ChangePageType(PageType.Index)">Index</button>
@@ -22,11 +31,12 @@
     string Navigation { get; set; } = PageType.Index;
     List<CourseDTO> Model { get; set; } = new();
     string Alert { get; set; } = "";
+    public CourseDTO Course { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
         Alert = "";
-        Model = await AdminService.GetAsync<CourseDTO>();
+        Model = await AdminService.GetAsync<CourseDTO>("courses?freeOnly=false");
     }
 
     void ChangePageType(string pageType) => Navigation = pageType;
@@ -35,7 +45,24 @@
 
     async Task OnClick(ClickModel model)
     {
+        if (model.PageType.Equals(PageType.Edit) || model.PageType.Equals(PageType.Delete))
+            Course = await AdminService.SingleAsync<CourseDTO>($"courses/{model.Id}") ?? new();
+
         ChangePageType(model.PageType);
+    }
+
+    async Task OnChange(string alert)
+    {
+        try
+        {
+            Alert = alert;
+            Model = await AdminService.GetAsync<CourseDTO>("courses");
+            ChangePageType(PageType.Index);
+        }
+        catch
+        {
+            Alert = "Couldn't create/edit/delete the course.";
+        }
     }
 
 }

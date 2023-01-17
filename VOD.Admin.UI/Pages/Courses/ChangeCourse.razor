@@ -1,0 +1,82 @@
+﻿@inject IAdminService AdminService
+
+<div class="d-xl-flex justify-content-center">
+    <EditForm Model="@Model" OnValidSubmit="@OnFormSubmit" class="mb-5 border border-1 border-secondary p-2 w-25">
+        <DataAnnotationsValidator />
+        <h4>@Page Course</h4>
+        <div class="mb-3">
+            @if (Page.Equals(PageType.Delete))
+            {
+                <InputText id="title" class="form-control me-2" @bind-Value="Model.Title" disabled placeholder="Title"></InputText>
+            }
+            else
+            {
+                <InputText id="title" class="form-control me-2" @bind-Value="Model.Title" placeholder="Title"></InputText>
+            }
+            <ValidationMessage For="@(() => Model.Title)" />
+        </div>
+        @if (!Page.Equals(PageType.Delete))
+        {
+            <div class="mb-3">
+                <InputText id="description" class="form-control me-2" @bind-Value="Model.Description" placeholder="Description"></InputText>
+                <ValidationMessage For="@(() => Model.Description)" />
+            </div>
+            <div class="mb-3">
+                <InputText id="image-url" class="form-control me-2" @bind-Value="Model.ImageUrl" placeholder="Image Url"></InputText>
+                <ValidationMessage For="@(() => Model.ImageUrl)" />
+            </div>
+            <div class="mb-3">
+                <InputText id="marquee-image-url" class="form-control me-2" @bind-Value="Model.MarqueeImageUrl" placeholder="Marquee Image Url"></InputText>
+                <ValidationMessage For="@(() => Model.MarqueeImageUrl)" />
+            </div>
+
+            <InputSelect @bind-Value="Model.InstructorId" class="form-control mb-3">
+                <option value=0>Instructor ...</option>
+                @foreach (var instructor in Instructors)
+                {
+                    <option value="@instructor.Id">@instructor.Name</option>
+                }
+            </InputSelect>
+
+            <div class="mb-3">
+                <label>
+                    <InputCheckbox @bind-Value="Model.Free" />
+                    Free Course
+                </label>
+            </div>
+        }
+        <button type="submit" class="btn btn-@(Page.Equals(PageType.Delete) ? "danger" : "primary") rounded-0">@Page</button>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter] public CourseDTO Model { get; set; } = new();
+    [Parameter] public string Page { get; set; } = string.Empty;
+    [Parameter] public EventCallback<string> OnChange { get; set; }
+    List<InstructorDTO> Instructors { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Instructors = await AdminService.GetAsync<InstructorDTO>("instructors");
+    }
+
+    private async Task OnFormSubmit()
+    {
+        try
+        {
+            if (Page.Equals(PageType.Create))
+                await AdminService.CreateAsync<CourseDTO>("courses", Model);
+            else if (Page.Equals(PageType.Edit))
+                await AdminService.EditAsync<CourseDTO>($"courses/{Model.Id}", Model);
+            else if (Page.Equals(PageType.Delete))
+                await AdminService.DeleteAsync<CourseDTO>($"courses/{Model.Id}");
+
+            await OnChange.InvokeAsync("");
+        }
+        catch
+        {
+            await OnChange.InvokeAsync("Couldn't create/edit/delete the course.");
+        }
+    }
+
+}

@@ -1,10 +1,11 @@
-﻿namespace VOD.Common.Services;
-
-public interface IAdminService
+﻿namespace VOD.Common.Services
 {
-    Task CreateAsync<TDto>(TDto dto);
-    Task DeleteAsync<TDto>(int id);
-    Task EditAsync<TDto>(TDto dto, int id);
-    Task<List<TDto>> GetAsync<TDto>();
-    Task<TDto?> GetAsync<TDto>(int id);
+    public interface IAdminService
+    {
+        Task CreateAsync<TDto>(string uri, TDto dto);
+        Task DeleteAsync<TDto>(string uri);
+        Task EditAsync<TDto>(string uri, TDto dto);
+        Task<List<TDto>> GetAsync<TDto>(string uri);
+        Task<TDto?> SingleAsync<TDto>(string uri);
+    }
 }
