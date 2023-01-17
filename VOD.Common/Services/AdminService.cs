@@ -5,9 +5,9 @@ namespace VOD.Common.Services;
 
 public class AdminService : IAdminService
 {
-    readonly MemebershipHttpClient _http;
+    readonly MembershipHttpClient _http;
 
-    public AdminService(MemebershipHttpClient httpClient)
+    public AdminService(MembershipHttpClient httpClient)
     {
         _http = httpClient;
     }

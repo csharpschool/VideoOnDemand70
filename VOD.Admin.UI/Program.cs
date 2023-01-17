@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<IAdminService, AdminService>();
-builder.Services.AddHttpClient<MemebershipHttpClient>(client => client.BaseAddress = new Uri("https://localhost:6001/api/"));
+builder.Services.AddHttpClient<MembershipHttpClient>(client => client.BaseAddress = new Uri("https://localhost:6001/api/"));
 
 var app = builder.Build();
 

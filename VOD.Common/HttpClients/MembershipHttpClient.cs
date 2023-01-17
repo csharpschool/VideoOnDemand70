@@ -1,10 +1,10 @@
 ﻿namespace VOD.Common.HttpClients;
 
-public class MemebershipHttpClient
+public class MembershipHttpClient
 {
     public HttpClient Client { get; }
 
-    public MemebershipHttpClient(HttpClient httpClient)
+    public MembershipHttpClient(HttpClient httpClient)
     {
         Client = httpClient;
     }
