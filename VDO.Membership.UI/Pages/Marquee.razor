@@ -1,0 +1,12 @@
+﻿<div class="d-flex flex-column">
+    <div class="marquee" style="background-image:url('@Course.MarqueeImageUrl');">
+        <img src="@Course.ImageUrl">
+    </div>
+    <h1 class="mt-2">@Course.Title</h1>
+    <h4>@Course.Description</h4>
+</div>
+
+
+@code {
+    [Parameter] public CourseDTO Course { get; set; } = new();
+}

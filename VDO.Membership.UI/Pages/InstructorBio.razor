@@ -1,0 +1,17 @@
+﻿<div class="ms-md-4" >
+    @if (Instructor != null)
+    {
+        <div class="card rounded-0 mt-4" style="width:260px;">
+            <div class="card-body text-center">
+                <img src="@Instructor.Avatar" class="border border-4 border-primary rounded-circle">
+                <h4>@Instructor.Name</h4>
+                <h5 class="text-primary">Instructor</h5>
+                <p>@Instructor.Description</p>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public InstructorDTO Instructor { get; set; } = new();
+}

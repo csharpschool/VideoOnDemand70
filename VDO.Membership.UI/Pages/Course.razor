@@ -1,0 +1,24 @@
+﻿@page "/course/{Id:int}"
+@inject IMembershipService MembershipService
+
+<h3 class="text-center">Course</h3>
+
+<a class="btn btn-primary rounded-0 mb-1" href="/">
+    <i class="oi oi-arrow-left"></i><span class="vertical-align"> Back to Dashboard</span>
+</a>
+
+<Marquee Course="@Model"/>
+
+<div class="d-flex flex-wrap justify-content-center">
+    <Sections Course="@Model"/>
+    <InstructorBio Instructor="@Model.Instructor" />
+</div>
+
+@code {
+    [Parameter] public int? Id { get; set; }
+    public CourseDTO Model { get; set; } = new CourseDTO();
+
+    protected override async Task OnInitializedAsync()  {
+        Model = await MembershipService.GetCourseAsync(Id);
+    }
+}
