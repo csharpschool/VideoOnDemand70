@@ -10,7 +10,7 @@ public class MembershipService : IMembershipService
     {
         try
         {
-            bool freeOnly = true;
+            bool freeOnly = false;
             using HttpResponseMessage response = await _http.Client.GetAsync($"courses?freeOnly={freeOnly}");
             response.EnsureSuccessStatusCode();
 
