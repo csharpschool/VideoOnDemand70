@@ -1,0 +1,33 @@
+﻿@page "/video/{Id:int}"
+@inject IMembershipService MembershipService
+
+<a class="btn btn-primary rounded-0 mb-1" href="/course/@Model.CourseId">
+    <i class="oi oi-arrow-left"></i><span class="vertical-align"> Back to @Model.Course</span>
+</a>
+<div class="d-flex flex-column">
+
+    <div class="card flex-fill rounded-0">
+        @if (Model.Url != null)
+        {
+            <div class="video-player">
+                <iframe src="@Model.Url" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        }
+        <div class="card-body">
+            <h2>@Model.Title</h2>
+            <h4>@Model.Course</h4>
+            <hr class="m-0">
+            @Model.Description
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int? Id { get; set; }
+    public VideoDTO Model { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await MembershipService.GetVideoAsync(Id);
+    }
+}

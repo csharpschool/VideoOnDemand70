@@ -49,7 +49,7 @@ public class MembershipService : IMembershipService
         try
         {
             if (id is null) return new VideoDTO();
-            using HttpResponseMessage response = await _http.Client.GetAsync($"courses/{id}");
+            using HttpResponseMessage response = await _http.Client.GetAsync($"videos/{id}");
             response.EnsureSuccessStatusCode();
 
             var result = JsonSerializer.Deserialize<VideoDTO>(await response.Content.ReadAsStreamAsync(),
