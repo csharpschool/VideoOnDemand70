@@ -1,0 +1,61 @@
+﻿@page "/register"
+@inject UserHttpClient Http
+@inject NavigationManager NavManager
+
+<h3>Create an Account</h3>
+
+@if (!string.IsNullOrWhiteSpace(message))
+{
+    <div class="alert alert-danger">
+        <p>@message</p>
+    </div>
+}
+
+<EditForm Model="@model" OnValidSubmit="@CreateUser">
+    <DataAnnotationsValidator />
+    <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <InputText id="email" class="form-control me-2" @bind-Value="model.Email" placeholder="Email"></InputText>
+        <ValidationMessage For="@(() => model.Email)" />
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <InputText id="password" type="password" class="form-control me-2" @bind-Value="model.Password" placeholder="Password"></InputText>
+        <ValidationMessage For="@(() => model.Password)" />
+    </div>
+    <div class="mb-3">
+        <label for="confirm-password" class="form-label">Confirm Password</label>
+        <InputText id="confirm-password" type="password" class="form-control me-2" @bind-Value="model.ConfirmPassword" placeholder="Confirm Password"></InputText>
+        <ValidationMessage For="@(() => model.ConfirmPassword)" />
+    </div>
+    <div class="mb-3">
+        <label>
+            <InputCheckbox @bind-Value="model.IsCustomer" />
+            Customer (faking a paid customer)
+        </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+
+@code {
+    CreateUserModel model = new();
+    string message = string.Empty;
+
+    private async Task CreateUser()
+    {
+        try
+        {
+            message = string.Empty;
+            await Http.CreateUser(model);
+            message = "User created.";
+        }
+        catch
+        {
+            message = "Failed to create user.";
+        }
+
+    }
+
+}
