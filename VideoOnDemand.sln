@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VOD.Membership.API", "VOD.M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VDO.Membership.UI", "VDO.Membership.UI\VDO.Membership.UI.csproj", "{3908F0FD-25DF-46D9-B408-7416B75C86C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VOD.Users.API", "VOD.Users.API\VOD.Users.API.csproj", "{637E2F2C-29AD-4DAA-BB6C-54E3CE5BF072}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VOD.Users.API", "VOD.Users.API\VOD.Users.API.csproj", "{637E2F2C-29AD-4DAA-BB6C-54E3CE5BF072}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VOD.Users.Database", "VOD.Users.Database\VOD.Users.Database.csproj", "{5571DE33-DCF4-461B-91DE-0D87175A0B78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VOD.Users.Database", "VOD.Users.Database\VOD.Users.Database.csproj", "{5571DE33-DCF4-461B-91DE-0D87175A0B78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VDO.Token.API", "VDO.Token.API\VDO.Token.API.csproj", "{B8DF7FC8-2295-4863-B77B-53B0D8D93483}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{5571DE33-DCF4-461B-91DE-0D87175A0B78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5571DE33-DCF4-461B-91DE-0D87175A0B78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5571DE33-DCF4-461B-91DE-0D87175A0B78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8DF7FC8-2295-4863-B77B-53B0D8D93483}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8DF7FC8-2295-4863-B77B-53B0D8D93483}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8DF7FC8-2295-4863-B77B-53B0D8D93483}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8DF7FC8-2295-4863-B77B-53B0D8D93483}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
