@@ -10,8 +10,4 @@
     <ProjectReference Include="..\VOD.Common\VOD.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Authentication\" />
-  </ItemGroup>
-
 </Project>
