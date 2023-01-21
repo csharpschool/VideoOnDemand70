@@ -1,5 +1,6 @@
 ﻿global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+global using Microsoft.AspNetCore.Components.Authorization;
 global using Blazored.LocalStorage;
 global using VDO.Membership.UI;
 global using VOD.Common.HttpClients;

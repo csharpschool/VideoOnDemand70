@@ -6,7 +6,7 @@
         private readonly ITokenService _tokenService;
         public TokensController(ITokenService tokenService) => _tokenService = tokenService;
 
-        [Route("token")]
+        [Route("api/tokens")]
         [HttpPost]
         public async Task<IResult> Get([FromBody] LoginUserDTO loginUser)
         {
@@ -26,7 +26,7 @@
             return Results.Unauthorized();
         }
 
-        [Route("token/create")]
+        [Route("api/tokens/create")]
         [HttpPost]
         public async Task<IResult> Create(TokenUserDTO tokenUserDTO)
         {
