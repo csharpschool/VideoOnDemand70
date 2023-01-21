@@ -1,4 +1,8 @@
-﻿namespace VOD.Common.Services;
+﻿using System.Net;
+using System.Text;
+using VOD.Common.Models;
+
+namespace VOD.Common.Services;
 
 public class AuthenticationService : AuthenticationStateProvider
 {
@@ -22,4 +26,64 @@ public class AuthenticationService : AuthenticationStateProvider
         _http.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
         return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(JwtParser.ParseClaimsFromJWT(token), AuthConstants.AuthenticationType)));
     }
+
+    public async Task<AuthenticatedUserDTO?> Login(AuthenticationUserModel userForAuthentication)
+    {
+        try
+        {
+            var user = new LoginUserDTO(userForAuthentication.Email, userForAuthentication.Password);
+
+            using StringContent jsonContent = new(
+                JsonSerializer.Serialize(user),
+                Encoding.UTF8,
+                "application/json");
+
+            using HttpResponseMessage response = await _http.Client.PostAsync("token", jsonContent);
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            if (response.StatusCode.Equals(HttpStatusCode.Unauthorized) || string.IsNullOrWhiteSpace(responseContent))
+            {
+                var updateTokenUser = new TokenUserDTO(userForAuthentication.Email);
+
+                using StringContent jsonUpdateTokenUser = new(
+                    JsonSerializer.Serialize(updateTokenUser),
+                    Encoding.UTF8,
+                    "application/json");
+
+                using HttpResponseMessage createResponse = await _http.Client.PostAsync("token/create", jsonUpdateTokenUser);
+
+                createResponse.EnsureSuccessStatusCode();
+
+                using HttpResponseMessage fetchResponse = await _http.Client.PostAsync("token", jsonContent);
+                fetchResponse.EnsureSuccessStatusCode();
+                responseContent = await fetchResponse.Content.ReadAsStringAsync();
+            }
+
+            var result = JsonSerializer.Deserialize<AuthenticatedUserDTO>(responseContent,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            if (result is null) return default;
+
+            await _storage.SetAsync(AuthConstants.TokenName, result.AccessToken ?? string.Empty);
+
+            _http.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.AccessToken);
+
+            var authenticatedUser = new ClaimsPrincipal(
+                new ClaimsIdentity(
+                    JwtParser.ParseClaimsFromJWT(result.AccessToken ?? string.Empty), 
+                        AuthConstants.AuthenticationType));
+
+            var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
+
+            NotifyAuthenticationStateChanged(authState);
+
+            return result;
+        }
+        catch
+        {
+            return default;
+        }
+    }
+
 }
