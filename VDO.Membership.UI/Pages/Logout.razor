@@ -1,0 +1,18 @@
+﻿@page "/logout"
+@inject AuthenticationService AuthService
+@inject NavigationManager NavManager
+@inject UserHttpClient UserHttp
+@inject MembershipHttpClient MemberHttp
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        /*UserHttp.Client.DefaultRequestHeaders.Remove("Authorization");
+        MemberHttp.Client.DefaultRequestHeaders.Remove("Authorization");*/
+
+        await AuthService.Logout();
+
+        NavManager.NavigateTo("/");
+        //NavManager.NavigateTo("/", forceLoad: true);
+    }
+}

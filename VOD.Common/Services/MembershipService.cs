@@ -1,16 +1,30 @@
-﻿namespace VOD.Common.Services;
+﻿using Blazored.LocalStorage;
+
+namespace VOD.Common.Services;
 
 public class MembershipService : IMembershipService
 {
     protected readonly MembershipHttpClient _http;
+    private readonly IStorageService _storage;
+    protected readonly ILocalStorageService _localStorage;
 
-    public MembershipService(MembershipHttpClient httpClient) => _http = httpClient;
+    public MembershipService(MembershipHttpClient httpClient, IStorageService storage, ILocalStorageService localStorage)
+    {
+        _http = httpClient;
+        _storage = storage;
+        _localStorage = localStorage;
+    }
 
     public async Task<List<CourseDTO>> GetCoursesAsync()
     {
         try
         {
-            bool freeOnly = false;
+            var token = await _storage.GetAsync(AuthConstants.TokenName);
+
+            bool freeOnly = JwtParser.ParseIsNotInRoleFromPayload(token, UserRole.Customer);
+
+            _http.AddBearerToken(token);
+            
             using HttpResponseMessage response = await _http.Client.GetAsync($"courses?freeOnly={freeOnly}");
             response.EnsureSuccessStatusCode();
 

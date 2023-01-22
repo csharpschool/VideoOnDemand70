@@ -50,10 +50,10 @@ public class UserHttpClient
                     Encoding.UTF8,
                     "application/json");
 
-            using HttpResponseMessage response = await Client.PostAsync("api/users/paid", jsonContent);
+            using HttpResponseMessage response = await Client.PostAsync("users/paid", jsonContent);
             if (!response.IsSuccessStatusCode) throw new Exception(response.ReasonPhrase);
         }
-        catch
+        catch(Exception ex)
         {
             throw;
         }

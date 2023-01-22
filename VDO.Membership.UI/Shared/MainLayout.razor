@@ -7,11 +7,25 @@
 
     <main>
         <div class="top-row px-4">
-            <LoginRegister />
+            <AuthorizeView Policy="@UserRole.Registered">
+                <Authorized>
+                    Welcome @context.User.FindFirst("sub")?.Value
+                    <NavLink class="nav-link" href="logout">
+                        <span class="oi oi-account-logout"></span> Log Out
+                    </NavLink>
+                </Authorized>
+                <NotAuthorized>
+                    <LoginRegister />
+                </NotAuthorized>
+            </AuthorizeView>
 
-            <NavLink class="btn btn-success" href="sign-up">
-                <span class="oi oi-account-login"></span> Paid
-            </NavLink>
+            <AuthorizeView Policy="@UserPolicy.NotCustomer">
+                <Authorized>
+                    <NavLink class="btn btn-success" href="sign-up">
+                        <span class="oi oi-account-login"></span> Paid
+                    </NavLink>
+                </Authorized>
+            </AuthorizeView>
         </div>
 
         <article class="content px-4 mx-auto" style="max-width:1920px">

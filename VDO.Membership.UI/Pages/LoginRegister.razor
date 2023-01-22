@@ -1,4 +1,5 @@
-﻿@inject NavigationManager NavManager
+﻿@inject AuthenticationService AuthService
+@inject NavigationManager NavManager
 
 <EditForm Model="model" OnValidSubmit="Login">
     <div class="d-flex">
@@ -17,6 +18,10 @@
 
     private async Task Login()
     {
+        var user = await AuthService.Login(model);
+
+        if (user is not null)
+            NavManager.NavigateTo("/");
     }
 
     private void RegisterUser() =>  NavManager.NavigateTo("/register");

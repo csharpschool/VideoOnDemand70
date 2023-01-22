@@ -8,5 +8,4 @@ public class AuthenticationHttpClient
     {
         Client = httpClient;
     }
-
 }

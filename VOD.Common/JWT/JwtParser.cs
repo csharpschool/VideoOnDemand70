@@ -50,7 +50,7 @@ public static class JwtParser
         try
         {
             var claims = ParseClaimsFromPayload(jwt);
-            var email = claims.SingleOrDefault(c => c.ValueType.Equals("email"))?.Value.ToString() ?? string.Empty;
+            var email = claims.SingleOrDefault(c => c.Type.Equals("email"))?.Value.ToString() ?? string.Empty;
 
             return new SignUpUserDTO(email, claims);
         }
@@ -61,4 +61,49 @@ public static class JwtParser
         return null;
     }
 
+    public static bool ParseIsInRoleFromPayload(string jwt, string role)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(jwt)) return false;
+
+            List<Claim>? claims = ParseUserInfoFromPayload(jwt)?.Roles;
+
+            if (claims is null || claims.Count.Equals(0)) return false;
+
+            var isInRole = claims.Exists(c => c.Value.Equals(role));
+
+            return isInRole;
+        }
+        catch (Exception ex)
+        {
+        }
+
+        return false;
+    }
+
+    public static bool ParseIsNotInRoleFromPayload(string jwt, string role) => !ParseIsInRoleFromPayload(jwt, role);
+
+    public static bool CompareTokenClaims(string? token1, string? token2)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(token1) || string.IsNullOrWhiteSpace(token2)) return false;
+
+            var claims1 = ParseClaimsFromPayload(token1).Where(c => c.Type.Equals(ClaimTypes.Role));
+            var claims2 = ParseClaimsFromPayload(token2).Where(c => c.Type.Equals(ClaimTypes.Role));
+
+            if(claims1.Count() != claims2.Count()) return false;
+
+            var success = true;
+            foreach (var claim in claims1)
+            {
+                if (!claims2.Any(c => c.Value.Equals(claim.Value))) { success = false; break; }
+            }
+                
+            return success;
+
+        }
+        catch { return false; }
+    }
 }

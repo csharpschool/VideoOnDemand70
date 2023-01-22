@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VOD.Users.API", "VOD.Users.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VOD.Users.Database", "VOD.Users.Database\VOD.Users.Database.csproj", "{5571DE33-DCF4-461B-91DE-0D87175A0B78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VDO.Token.API", "VDO.Token.API\VDO.Token.API.csproj", "{B8DF7FC8-2295-4863-B77B-53B0D8D93483}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VDO.Token.API", "VDO.Token.API\VDO.Token.API.csproj", "{B8DF7FC8-2295-4863-B77B-53B0D8D93483}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

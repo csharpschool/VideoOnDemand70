@@ -17,6 +17,6 @@ public static class UserPolicy
 
 public static class AuthConstants
 {
-    public static string TokenName => "AuthToken";
+    public static string TokenName => "JWT";
     public static string AuthenticationType => "jwtAuthType";
 }

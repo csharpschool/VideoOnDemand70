@@ -5,13 +5,21 @@
 
 <h1 class="text-center">Dashboard</h1>
 
-<div class="d-flex flex-wrap justify-content-center">
-    @foreach (var course in Courses)
-    {
-        <CourseCard Course="@course" />
-    }
-</div>
+<AuthorizeView Policy="@UserPolicy.Registered">
+    <NotAuthorized>
+        <h4 class="text-center">@context.User.FindFirst("sub")?.Value register for free or paid courses.</h4>
+    </NotAuthorized>
+    <Authorized>
+        <h4 class="text-center">Welcome @context.User.FindFirst("sub")?.Value.</h4>
 
+        <div class="d-flex flex-wrap justify-content-center">
+            @foreach (var course in Courses)
+            {
+                <CourseCard Course="@course" />
+            }
+        </div>
+    </Authorized>
+</AuthorizeView>
 
 @code {
     public List<CourseDTO> Courses { get; set; } = new();

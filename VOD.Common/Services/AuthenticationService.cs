@@ -38,7 +38,7 @@ public class AuthenticationService : AuthenticationStateProvider
                 Encoding.UTF8,
                 "application/json");
 
-            using HttpResponseMessage response = await _http.Client.PostAsync("token", jsonContent);
+            using HttpResponseMessage response = await _http.Client.PostAsync("tokens", jsonContent);
 
             string responseContent = await response.Content.ReadAsStringAsync();
 
@@ -51,11 +51,11 @@ public class AuthenticationService : AuthenticationStateProvider
                     Encoding.UTF8,
                     "application/json");
 
-                using HttpResponseMessage createResponse = await _http.Client.PostAsync("token/create", jsonUpdateTokenUser);
+                using HttpResponseMessage createResponse = await _http.Client.PostAsync("tokens/create", jsonUpdateTokenUser);
 
                 createResponse.EnsureSuccessStatusCode();
 
-                using HttpResponseMessage fetchResponse = await _http.Client.PostAsync("token", jsonContent);
+                using HttpResponseMessage fetchResponse = await _http.Client.PostAsync("tokens", jsonContent);
                 fetchResponse.EnsureSuccessStatusCode();
                 responseContent = await fetchResponse.Content.ReadAsStringAsync();
             }

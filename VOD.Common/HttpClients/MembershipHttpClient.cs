@@ -8,4 +8,10 @@ public class MembershipHttpClient
     {
         Client = httpClient;
     }
+
+    public void AddBearerToken(string token)
+    {
+        Client.DefaultRequestHeaders.Remove("Authorization");
+        Client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+    }
 }

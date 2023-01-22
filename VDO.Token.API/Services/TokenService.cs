@@ -32,8 +32,8 @@ public class TokenService : ITokenService
             var signingKey = Convert.FromBase64String(_configuration["Jwt:SigningSecret"] ?? "");
             var credentials = new SigningCredentials(new SymmetricSecurityKey(signingKey), SecurityAlgorithms.HmacSha256Signature);
             var duration = int.Parse(_configuration["Jwt:Duration"] ?? "");
-            var now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
-            var expires = new DateTimeOffset(DateTime.UtcNow.AddDays(duration)).ToUnixTimeSeconds().ToString();
+            var now = EpochTime.GetIntDate(DateTime.UtcNow).ToString();// new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+            var expires = EpochTime.GetIntDate(DateTime.UtcNow.AddDays(duration)).ToString(); // new DateTimeOffset(DateTime.UtcNow.AddDays(duration)).ToUnixTimeSeconds().ToString();
 
             //Claim Types: https://datatracker.ietf.org/doc/html/rfc7519#section-4
             List<Claim> claims = new() {
@@ -45,7 +45,7 @@ public class TokenService : ITokenService
                 new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
                 new Claim(JwtRegisteredClaimNames.Jti, user.Id)
             };
-
+            
             foreach (var role in roles)
                 claims.Add(new Claim(ClaimTypes.Role, role));
 
@@ -58,7 +58,7 @@ public class TokenService : ITokenService
             var token = jwtTokenHandler.WriteToken(jwtToken);
             return token;
         }
-        catch
+        catch(Exception ex)
         {
             throw;
         }
@@ -77,10 +77,13 @@ public class TokenService : ITokenService
             var roles = await _userManager.GetRolesAsync(user);
             var token = CreateToken(roles, user);
 
-            var result = await _userManager.SetAuthenticationTokenAsync(user, "VOD", "UserToken", token);
+            if (tokenUserDTO.Save) 
+            {
+                var result = await _userManager.SetAuthenticationTokenAsync(user, "VOD", "UserToken", token);
 
-            if (result != IdentityResult.Success)
-                throw new SecurityTokenException("Could not add token to user");
+                if (result != IdentityResult.Success)
+                    throw new SecurityTokenException("Could not add token to user");
+            }
 
             return token;
         }
@@ -101,6 +104,11 @@ public class TokenService : ITokenService
             if (user is null) throw new UnauthorizedAccessException();
 
             var token = await _userManager.GetAuthenticationTokenAsync(user, "VOD", "UserToken");
+
+            var compareToken = await GenerateTokenAsync(new TokenUserDTO(loginUserDTO.Email, false));
+
+            var success = JwtParser.CompareTokenClaims(token, compareToken);
+            if(success == false) token = await GenerateTokenAsync(new TokenUserDTO(loginUserDTO.Email));
 
             return new AuthenticatedUserDTO(token, user.UserName);
         }

@@ -9,3 +9,4 @@ global using VOD.Users.Database.Contexts;
 global using VOD.Users.Database.Entities;
 global using VOD.Users.Database.Services;
 global using VOD.Common.DTOs;
+global using VOD.Common.JWT;
