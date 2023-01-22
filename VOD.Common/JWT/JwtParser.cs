@@ -34,7 +34,7 @@ public static class JwtParser
         claims.AddRange(jwtProperties.Select(jp => new Claim(jp.Key, jp.Value.ToString() ?? string.Empty)));
     }
 
-    public static List<Claim> ParseClaimsFromJWT(string jwt)
+    public static List<Claim> ParseClaimsFromPayload(string jwt)
     {
         var claims = new List<Claim>();
         if (string.IsNullOrWhiteSpace(jwt)) return claims;
@@ -43,6 +43,22 @@ public static class JwtParser
         var jwtProperties = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
         ExtractClaimsFormPayload(claims, jwtProperties);
         return claims;
+    }
+
+    public static SignUpUserDTO? ParseUserInfoFromPayload(string jwt)
+    {
+        try
+        {
+            var claims = ParseClaimsFromPayload(jwt);
+            var email = claims.SingleOrDefault(c => c.ValueType.Equals("email"))?.Value.ToString() ?? string.Empty;
+
+            return new SignUpUserDTO(email, claims);
+        }
+        catch (Exception ex)
+        {
+        }
+
+        return null;
     }
 
 }

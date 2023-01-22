@@ -24,7 +24,7 @@ public class AuthenticationService : AuthenticationStateProvider
         if (string.IsNullOrWhiteSpace(token)) return _anonymous;
 
         _http.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
-        return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(JwtParser.ParseClaimsFromJWT(token), AuthConstants.AuthenticationType)));
+        return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(JwtParser.ParseClaimsFromPayload(token), AuthConstants.AuthenticationType)));
     }
 
     public async Task<AuthenticatedUserDTO?> Login(AuthenticationUserModel userForAuthentication)
@@ -71,7 +71,7 @@ public class AuthenticationService : AuthenticationStateProvider
 
             var authenticatedUser = new ClaimsPrincipal(
                 new ClaimsIdentity(
-                    JwtParser.ParseClaimsFromJWT(result.AccessToken ?? string.Empty), 
+                    JwtParser.ParseClaimsFromPayload(result.AccessToken ?? string.Empty), 
                         AuthConstants.AuthenticationType));
 
             var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
@@ -86,4 +86,23 @@ public class AuthenticationService : AuthenticationStateProvider
         }
     }
 
+    public async Task Logout()
+    {
+        await _storage.RemoveAsync(AuthConstants.TokenName);
+
+        _http.Client.DefaultRequestHeaders.Authorization = null;
+
+        var authState = Task.FromResult(_anonymous);
+
+        NotifyAuthenticationStateChanged(authState);
+    }
+
+    public async Task<SignUpUserDTO?> GetUserFromToken()
+    {
+        var token = await _storage.GetAsync(AuthConstants.TokenName);
+
+        if (string.IsNullOrWhiteSpace(token)) return default;
+
+        return JwtParser.ParseUserInfoFromPayload(token);
+    }
 }
